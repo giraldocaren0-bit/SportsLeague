@@ -29,11 +29,17 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 
+// ── Repositories ──
+
+builder.Services.AddScoped<IPlayerRepository, PlayerRepository>(); // NUEVO
+
 
 // ── Services ──
 
 builder.Services.AddScoped<ITeamService, TeamService>();
+// ── Services ──
 
+builder.Services.AddScoped<IPlayerService, PlayerService>(); // NUEVO
 
 // ── AutoMapper ──
 
@@ -76,4 +82,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
 app.Run();
+
