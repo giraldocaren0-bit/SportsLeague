@@ -31,15 +31,24 @@ builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 
 // ── Repositories ──
 
-builder.Services.AddScoped<IPlayerRepository, PlayerRepository>(); // NUEVO
+builder.Services.AddScoped<IPlayerRepository, PlayerRepository>(); 
 
+builder.Services.AddScoped<IRefereeRepository, RefereeRepository>(); // NUEVO
+
+builder.Services.AddScoped<ITournamentRepository, TournamentRepository>(); // NUEVO
+
+builder.Services.AddScoped<ITournamentTeamRepository, TournamentTeamRepository>(); // NUEVO
 
 // ── Services ──
 
 builder.Services.AddScoped<ITeamService, TeamService>();
 // ── Services ──
 
-builder.Services.AddScoped<IPlayerService, PlayerService>(); // NUEVO
+builder.Services.AddScoped<IPlayerService, PlayerService>();
+
+builder.Services.AddScoped<IRefereeService, RefereeService>(); 
+
+builder.Services.AddScoped<ITournamentService, TournamentService>();
 
 // ── AutoMapper ──
 

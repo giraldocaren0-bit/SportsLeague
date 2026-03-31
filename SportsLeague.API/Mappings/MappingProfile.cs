@@ -24,14 +24,28 @@ namespace SportsLeague.API.Mappings
 
             CreateMap<PlayerRequestDTO, Player>();
 
-            CreateMap<Player, PlayerResponseDTO>()
+            CreateMap<Player, PlayerResponseDTO>();
+
+            // Referee mappings
+
+            CreateMap<RefereeRequestDTO, Referee>();
+
+            CreateMap<Referee, RefereeResponseDTO>();
+
+            // Tournament mappings
+
+            CreateMap<TournamentRequestDTO, Tournament>();
+
+            CreateMap<Tournament, TournamentResponseDTO>()
 
             .ForMember(
 
-            dest => dest.TeamName,
+            dest => dest.TeamsCount,
 
-            opt => opt.MapFrom(src => src.Team.Name));
+            opt => opt.MapFrom(src =>
 
+            src.TournamentTeams != null ? src.TournamentTeams.Count : 0));
+           
         }
 
     }
