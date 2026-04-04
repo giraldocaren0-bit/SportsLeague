@@ -25,19 +25,21 @@ public class TournamentController : ControllerBase
     private readonly ITournamentService _tournamentService;
 
     private readonly IMapper _mapper;
+    private readonly ITournamentSponsorService _tournamentSponsorService;
 
 
     public TournamentController(
 
     ITournamentService tournamentService,
 
-    IMapper mapper)
+    IMapper mapper, ITournamentSponsorService tournamentSponsorService)
 
     {
 
         _tournamentService = tournamentService;
 
         _mapper = mapper;
+        _tournamentSponsorService = tournamentSponsorService;
 
     }
 
@@ -217,4 +219,17 @@ public class TournamentController : ControllerBase
 
     }
 
-}
+
+[HttpGet("{id}/sponsors")]
+    public async Task<ActionResult<IEnumerable<SponsorResponseDTO>>> GetSponsors(int id)
+    {
+        try
+        {
+            var sponsors = await _tournamentSponsorService.GetSponsorsByTournamentIdAsync(id);
+            return Ok(_mapper.Map<IEnumerable<SponsorResponseDTO>>(sponsors));
+        }
+        catch (KeyNotFoundException ex) { return NotFound(new { message = ex.Message }); }
+    }
+  }
+
+

@@ -25,12 +25,15 @@ namespace SportsLeague.API.Controllers
         private readonly IMapper _mapper;
 
         private readonly ILogger<SponsorController> _logger;
+        private readonly ITournamentSponsorService _tournamentSponsorService;
 
-        public SponsorController(ISponsorService sponsorService, IMapper mapper, ILogger<SponsorController> logger)
+        public SponsorController(ISponsorService sponsorService, IMapper mapper, ILogger<SponsorController> logger, ITournamentSponsorService tournamentSponsorService)
         {
             _sponsorService = sponsorService;
             _mapper = mapper;
             _logger = logger;
+            _tournamentSponsorService = tournamentSponsorService;   
+            
         }
         [HttpPost]
         public async Task<ActionResult<SponsorResponseDTO>> CreateSponsor(SponsorRequestDTO sponsorRequest)
@@ -170,6 +173,68 @@ namespace SportsLeague.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An unexpected error occurred while updating category for sponsor with ID {Id}", id);
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
+        [HttpGet("{id}/tournaments")]
+        public async Task<ActionResult<IEnumerable<TournamentSponsorResponseDTO>>> GetTournamentsBySponsorId(int id)
+        {
+            try
+            {
+                var tournaments = await _tournamentSponsorService.GetTournamentsBySponsorIdAsync(id);
+                var tournamentResponses = _mapper.Map<IEnumerable<TournamentSponsorResponseDTO>>(tournaments);
+                return Ok(tournamentResponses);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _logger.LogWarning(ex, "Failed to get tournaments for sponsor with ID {Id} because it was not found", id);
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An unexpected error occurred while getting tournaments for sponsor with ID {Id}", id);
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
+        [HttpPost("{id}/tournaments")]
+        public async Task<IActionResult> AddSponsorToTournament(int id, RegisterSponsorDTO addDTO)
+        {
+            try
+            {
+                await _tournamentSponsorService.AddSponsorToTournamentAsync(addDTO.TournamentId, id, addDTO.ContractAmount);
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogWarning(ex, "Failed to add sponsor with ID {Id} to tournament with ID {TournamentId} because the relationship already exists", id, addDTO.TournamentId);
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _logger.LogWarning(ex, "Failed to add sponsor with ID {Id} to tournament with ID {TournamentId} because one of them was not found", id, addDTO.TournamentId);
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An unexpected error occurred while adding sponsor with ID {Id} to tournament with ID {TournamentId}", id, addDTO.TournamentId);
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+        }
+            [HttpDelete("{id}/tournaments/{tournamentId}")]
+                    public async Task<IActionResult> DeleteSponsorFromTournament(int id, int tournamentId)
+        {     try
+            {
+                await _tournamentSponsorService.DeleteSponsorFromTournamentAsync(tournamentId, id);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _logger.LogWarning(ex, "Failed to delete sponsor with ID {Id} from tournament with ID {TournamentId} because the relationship was not found", id, tournamentId);
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An unexpected error occurred while deleting sponsor with ID {Id} from tournament with ID {TournamentId}", id, tournamentId);
                 return StatusCode(500, "An unexpected error occurred.");
             }
         }
