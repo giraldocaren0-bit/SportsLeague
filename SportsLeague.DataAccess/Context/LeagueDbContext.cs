@@ -30,7 +30,8 @@ namespace SportsLeague.DataAccess.Context
         public DbSet<TournamentTeam> TournamentTeams => Set<TournamentTeam>(); 
 
         public DbSet<Sponsor> Sponsors => Set<Sponsor>();
-        
+        public DbSet<TournamentSponsor> TournamentSponsors => Set<TournamentSponsor>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
 
         {
@@ -220,9 +221,66 @@ namespace SportsLeague.DataAccess.Context
                     .IsRequired(false);
 
 
-                    // Relación con Tournament
+                // ── TournamentSponsor Configuration ──
 
-                    entity.HasOne(tt => tt.Tournament)
+                   modelBuilder.Entity<TournamentSponsor>(entity =>
+                {
+
+                    entity.HasKey(ts => ts.Id);
+
+                    entity.Property(ts => ts.JoinedAt)
+
+                          .IsRequired();
+
+                    entity.Property(ts => ts.ContractAmount)
+
+                          .IsRequired()
+
+                          .HasPrecision(18, 2);
+
+                    entity.Property(ts => ts.CreatedAt)
+
+                          .IsRequired();
+
+                    entity.Property(ts => ts.UpdatedAt)
+
+                          .IsRequired(false);
+
+
+    // Relación con Tournament
+    
+           entity.HasOne(ts => ts.Tournament)
+
+          .WithMany(t => t.TournamentSponsors)
+
+          .HasForeignKey(ts => ts.TournamentId)
+
+          .OnDelete(DeleteBehavior.Cascade);
+
+
+    // Relación con Sponsor
+
+           entity.HasOne(ts => ts.Sponsor)
+
+          .WithMany(t => t.TournamentSponsors)
+
+          .HasForeignKey(ts => ts.SponsorId)
+
+          .OnDelete(DeleteBehavior.Cascade);
+
+
+    // Índice único compuesto: un patrocinador solo una vez por torneo
+        
+          entity.HasIndex(ts => new { ts.TournamentId, ts.SponsorId })
+
+          .IsUnique();
+
+                });
+
+
+                // Relación con Tournament
+
+                entity.HasOne(tt => tt.Tournament)
 
                     .WithMany(t => t.TournamentTeams)
 

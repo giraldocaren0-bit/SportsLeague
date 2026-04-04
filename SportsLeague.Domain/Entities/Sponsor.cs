@@ -17,6 +17,8 @@ namespace SportsLeague.Domain.Entities
 
         public SponsorCategory Category { get; set; }
 
+        public ICollection<TournamentSponsor> TournamentSponsors { get; set; } = new List<TournamentSponsor>();
+
     }
 
 }
