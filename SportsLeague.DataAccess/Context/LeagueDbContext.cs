@@ -317,6 +317,10 @@ namespace SportsLeague.DataAccess.Context
 
           .IsUnique();
 
+    // Índice único en el correo electrónico de contacto
+           entity.HasIndex(s => s.ContactEmail)
+                      .IsUnique();
+
             });
 
         }
