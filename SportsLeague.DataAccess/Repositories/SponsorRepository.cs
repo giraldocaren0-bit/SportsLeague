@@ -22,7 +22,7 @@ namespace SportsLeague.DataAccess.Repositories
             return await _dbSet
                 .FirstOrDefaultAsync(s => s.Name == name);
         }
-        public async Task<IEnumerable<Sponsor>> GetbyCategoryAsync(SponsorCategory category)
+        public async Task<IEnumerable<Sponsor>> GetbyCategoryAsync(SponsorCategory category)//metodo para obtener los sponsors por categoria
         {
             return await _dbSet
                 .Where(s => s.Category == category)

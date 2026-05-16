@@ -13,8 +13,8 @@ namespace SportsLeague.DataAccess.Repositories
         public TournamentSponsorRepository(LeagueDbContext context) : base(context)
         {
         }
-
-        public async Task<IEnumerable<TournamentSponsor>> GetBySponsorIdAsync(int sponsorId)
+        
+        public async Task<IEnumerable<TournamentSponsor>> GetBySponsorIdAsync(int sponsorId) //obtiene los torneos asociados a un patrocinador
         {
                  return await _dbSet
 
@@ -25,7 +25,7 @@ namespace SportsLeague.DataAccess.Repositories
                 .ToListAsync();
         }
 
-        public async Task<TournamentSponsor?> GetByTournamentIdAndSponsorIdAsync(int tournamentId, int sponsorId)
+        public async Task<TournamentSponsor?> GetByTournamentIdAndSponsorIdAsync(int tournamentId, int sponsorId) //obtiene la relación específica entre un torneo y un patrocinador
         {
 
             return await _dbSet
@@ -34,7 +34,7 @@ namespace SportsLeague.DataAccess.Repositories
            
         }
 
-        public async Task<IEnumerable<TournamentSponsor>> GetSByTournamentIdAsync(int tournamentId)
+        public async Task<IEnumerable<TournamentSponsor>> GetSByTournamentIdAsync(int tournamentId)//obtiene los patrocinadores asociados a un torneo
         {
                         return await _dbSet
 

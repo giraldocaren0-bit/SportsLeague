@@ -5,7 +5,7 @@ namespace SportsLeague.Domain.Interfaces.Services
 {
     public interface ISponsorService
     {
-        Task<IEnumerable<Sponsor>> GetAllAsync();
+        Task<IEnumerable<Sponsor>> GetAllAsync(); 
         Task<Sponsor?> GetByIdAsync(int id);
         Task<Sponsor?> GetByNameAsync(string name);
         Task<Sponsor?> GetByContactEmailAsync(string contactEmail);
@@ -13,7 +13,7 @@ namespace SportsLeague.Domain.Interfaces.Services
         Task<Sponsor?> UpdateAsync(int id, Sponsor sponsor);
 
         Task DeleteAsync(int id);
-        Task UpdateCategoryAsync(int id, SponsorCategory updatecategory);
+        Task UpdateCategoryAsync(int id, SponsorCategory updatecategory); //actualizar la categoria de un sponsor 
 
     }
 }
