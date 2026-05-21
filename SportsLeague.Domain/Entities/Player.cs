@@ -22,6 +22,8 @@ namespace SportsLeague.Domain.Entities
         public ICollection<Card> Cards { get; set; } = new List<Card>();
         public int TeamId { get; set; } // Foreign Key
         public Team Team { get; set; } = null!;// Navigation Property
+        public ICollection<MatchLineup> MatchLineups { get; set; } = new List<MatchLineup>();
+
 
     }
 }
