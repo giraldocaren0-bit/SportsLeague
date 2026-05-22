@@ -17,6 +17,20 @@ public class MatchValidationHelper
         _playerRepository = playerRepository;
     }
 
+    public async Task<Match> ValidateMatchForLineupAsync(int matchId)
+    {
+        var match = await _matchRepository.GetByIdAsync(matchId);
+        if (match == null)
+            throw new KeyNotFoundException($"No se encontró el partido con ID {matchId}");
+
+        // Para alineaciones, solo se permite Scheduled (V6)
+        if (match.Status != MatchStatus.Scheduled)
+            throw new InvalidOperationException(
+                "Solo se pueden registrar alineaciones en partidos con estado Scheduled");
+
+        return match;
+    }
+
     public async Task<Match> ValidateMatchForEventAsync(int matchId)
     {
         var match = await _matchRepository.GetByIdAsync(matchId);

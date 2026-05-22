@@ -32,7 +32,7 @@ public class MatchLineupService : IMatchLineupService
     public async Task<MatchLineup> AddToLineupAsync(int matchId, MatchLineup lineup)
     {
         // V1: El partido debe existir y V6: Solo Scheduled
-        var match = await _validationHelper.ValidateMatchForEventAsync(matchId);
+        var match = await _validationHelper.ValidateMatchForLineupAsync(matchId);
         if (match.Status != MatchStatus.Scheduled)
             throw new InvalidOperationException("Solo se pueden registrar alineaciones en partidos Scheduled");
 
